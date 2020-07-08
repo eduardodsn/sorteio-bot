@@ -3,24 +3,36 @@ import random
 from selenium import webdriver
 from tkinter import scrolledtext
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options 
 
 
 class UsualFunctions:
-    def __init__(self, user, password, link, quantity):
+    def __init__(self, user, password, link, quantity, selected):
         from dashboard import Dashboard
-        self.driver = webdriver.Chrome()
+        self.define_driver(selected)
         self.target_accounts = ['jairmessiasbolsonaro', 'raulgil3', 'neymarjr',
                                 'realdonaldtrump', 'gabigol', 'cristiano',
                                 'fatimabernardes', 'anapaulapadraooficial', 'rodrigomaiarj',
                                 'astarforbants', 'mosalah', 'arianagrande',
                                 'flamengo', 'liverpoolfc', 'fcbarcelona',
-                                'spacex', 'leomessi', 'brunomars']
+                                'spacex', 'leomessi', 'brunomars'
+                                'ronaldinho', 'championsleague', 'nike', 'realmadrid'
+                                'therock', 'instagram', 'natgeo']
         self.user = user
         self.password = password
         self.sorteio_link = link
         self.quantity_to_tag = int(quantity)
         self.scapegoats = []
         self.define_dashboard(Dashboard)
+
+
+    def define_driver(self, selected):
+        if selected == 'no':
+            chrome_options = Options()
+            chrome_options.add_argument('--headless')
+            self.driver = webdriver.Chrome(chrome_options=chrome_options)
+        else:
+            self.driver = webdriver.Chrome()
     
 
     def define_dashboard(self, Dashboard):
@@ -42,9 +54,9 @@ class UsualFunctions:
         self.unselected_target_accounts = self.target_accounts
 
         # quantidade de contas alvo para extrair (10 contas)
-        for i in range (0, 18):
+        for i in range (0, len(self.target_accounts)):
             while True:
-                position = random.randint(0, 17)
+                position = random.randint(0, len(self.target_accounts)-1)
                 try:
                     self.selected_target_accounts.append(self.unselected_target_accounts[position])
                     del self.unselected_target_accounts[position]
@@ -179,8 +191,8 @@ class UsualFunctions:
         
 
 # funcao para criar instanciar classe e iniciar o bot
-def run_bot(user, password, link, quantity):
-    bot = UsualFunctions(user, password, link, quantity)
+def run_bot(user, password, link, quantity, selected):
+    bot = UsualFunctions(user, password, link, quantity, selected)
     try:
         bot.driver.maximize_window()
         bot.draw_target_accounts()
