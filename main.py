@@ -1,4 +1,4 @@
-from dashboard import export_dashboard
+from dashboard import export_dash
 
 
-export_dashboard()
+export_dash()
